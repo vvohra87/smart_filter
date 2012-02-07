@@ -1,0 +1,63 @@
+= SmartFilter
+
+Rails gem to extend ActiveRecord with a smart_filter method.
+
+
+== Installation
+
+[As a gem (using Bundler)] gem "smart_filter", "~> 0.1.1" # hosted on rubygems.com
+[As a plugin] script/plugin install git://github.com/vvohra87/smart_filter.git
+
+
+== Why smart_filter?
+
+In most applications, I need the following types of search / filter options:
+1. %LIKE% matches for any text or string field such as "name", "description", "email", "address", etc
+2. Exact matches for any integer, date or datetime field such as "quantity", "id", "created_at", "start", "age", etc
+3. Range matches for any integer, decimal, float, date or datetime such as "price", "age", "created_at", etc
+
+SmartFilter simply provides a simple way to do just that.
+
+This is not meant to replace gems like meta-where / arel-table based query builders / search engines, just make life easier by having to write less code! (and apparently more documentation!)
+
+
+== How it works
+
+Once you have included the gem in your app, you now have a +smart_filter+ method for all your models.
+
+The method takes in a hash whose keys are dependent on the model definition.
+
+For numeric and datetime based columns it will accept 3 different inputs:
+1. column => value 	  # will return exact match for value
+2. column_min => value # will return all records where attribute has value greater than or equal to specified value
+3. column_max => value # will return all records where attribute has value less than or equal to specified value
+
+For string and text based columns it will accept only the column name.
+
+
+== Example
+
+Let's say that you have a Product model with the following attributes:
+
+    title: string
+    description: text
+    price: float
+    current_stock: integer
+    created_at: datetime
+
+
+So, on this the full set of options you would have is:
+
+    Product.smart_filter(
+        :title => "abc"	# where the title contains 'abc'
+    	:description => "cba" # where the description contains 'cba'
+    	:price => 5.0	# where the price is exactly 5.0
+    	:price_min => 10.0	# where the price is greater than or equal to 10.0
+    	:price_max => 20.0	# where the price is less than or equal to 20.0
+    	:current_stock => 55	# where the current stock is exactly 55
+    	:current_stock_min => 20	# .....etc.....
+    	:current_stock_max => 100	# .....etc.....
+    	:created_at => Time.now		
+    	:created_at_min => Time.now - 1.week
+    	:created_at_max => Time.now - 2.days
+    )

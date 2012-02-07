@@ -1,0 +1,8 @@
+pkg
+doc
+<<<<<<< HEAD
+Manifestgem-private_key.pem
+gem-public_cert.pem
+=======
+Manifest*.pem
+>>>>>>> fe4b16d9b51490208dd1b4f7453094ccd4bddc16
